@@ -1,6 +1,8 @@
 asgiref==3.4.0
 Django==3.2.4
+django-cors-headers==3.7.0
 djangorestframework==3.12.4
+environ==1.0
 flake8==3.9.2
 mccabe==0.6.1
 pycodestyle==2.7.0
