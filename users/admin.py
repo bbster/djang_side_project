@@ -1,8 +1,10 @@
 from django.contrib import admin
-from users.models import Users
+from .models import Users
 
 
-@admin.register(Users)
 class UsersAdmin(admin.ModelAdmin):
+    fields = ['email', 'username', 'password']
     list_display = ('id', 'email', 'username', 'password')
-    fields = ('email', 'username', 'password')
+
+
+admin.site.register(Users, UsersAdmin)
