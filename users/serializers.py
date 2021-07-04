@@ -10,5 +10,16 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'username',
-            'email'
+            'password',
         )
+
+
+# TODO 기능별 serializer 추가해보기
+class SignUpSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
+
+
+# class LoginSerializer(serializers.Serializer):
+#     username = serializers.CharField(required=True)
+#     password = serializers.CharField(required=True)
