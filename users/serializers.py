@@ -20,6 +20,6 @@ class SignUpSerializer(serializers.Serializer):
     password = serializers.CharField(required=True)
 
 
-# class LoginSerializer(serializers.Serializer):
-#     username = serializers.CharField(required=True)
-#     password = serializers.CharField(required=True)
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
