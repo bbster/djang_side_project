@@ -9,7 +9,6 @@ from boards.serializers import BoardSerializer
 class BoardViewset(viewsets.ModelViewSet):
     queryset = Boards.objects.all()
     serializer_class = BoardSerializer
-    authentication_classes = [TokenAuthentication]
 
     def perform_create(self, serializer):
 
@@ -20,5 +19,5 @@ class BoardViewset(viewsets.ModelViewSet):
         이때 자동으로 save()대신 perform_create()를 호출하는 것이다.
 
         """
-        breakpoint()
+        # breakpoint()
         return serializer.save(user=self.request.user)

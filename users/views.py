@@ -1,4 +1,6 @@
 from django.contrib.auth import authenticate, login
+from django.core.mail import EmailMessage
+
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -21,14 +23,17 @@ class SignupView(APIView):
         serializer = SignUpSerializer(data=request.data)
 
         if not serializer.is_valid():
-            return Response(data=serializer.data, status=status.HTTP_400)
+            return Response({"msg": "serializer.is_valid error"}, status=status.HTTP_400_BAD_REQUEST)
 
         user = Users.objects.create_user(username=serializer.data['username'], password=serializer.data['password'])
+
+        # email = EmailMessage('Email test', 'email 발송 테스트', to=[serializer.data['username']])
+        # email.send()
+
         user.save()
 
         token = Token.objects.create(user=user)
-
-        return Response({"token": token.values('key')}, status=status.HTTP_201_CREATED)
+        return Response({"token": token.key}, status=status.HTTP_201_CREATED)
 
 
 class LoginView(APIView):
@@ -37,16 +42,17 @@ class LoginView(APIView):
 
         if serializer.is_valid():
             user = authenticate(username=serializer.data['username'], password=serializer.data['password'])
-
             if user is not None:
                 token = Token.objects.filter(user=user)
-
                 if not token:  # 토큰값이 없다면 다시 생성
                     token = Token.objects.create(user=user)
                     login(request, user)
-                    return Response(token.values('key'), status=status.HTTP_200_OK)
+                    return Response({"token": token.key}, status=status.HTTP_200_OK)
                 else:  # 토큰값이 이미 있다면
-                    return Response(token.values('key'), status=status.HTTP_200_OK)
+                    login(request, user)
+                    return Response({"token": token.key}, status=status.HTTP_200_OK)
+            else:
+                return Response({"msg": "로그인 정보가 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
         else:
             return Response({"msg": "로그인 정보가 옳지 않습니다"}, status=status.HTTP_401_UNAUTHORIZED)
