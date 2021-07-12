@@ -3,8 +3,8 @@ from .models import Boards
 
 
 class BoardsAdmin(admin.ModelAdmin):
-    fields = ['title', 'text', 'user']
-    list_display = ('id', 'title', 'text', 'user')
+    fields = ['title', 'content', 'user', 'created_at', 'updated_at']
+    list_display = ('id', 'title', 'content', 'user', 'created_at', 'updated_at')
 
 
 admin.site.register(Boards, BoardsAdmin)

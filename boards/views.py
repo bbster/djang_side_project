@@ -1,5 +1,4 @@
 from rest_framework import viewsets, status
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -10,6 +9,7 @@ from boards.serializers import BoardSerializer
 class BoardViewset(viewsets.ModelViewSet):
     queryset = Boards.objects.all()
     serializer_class = BoardSerializer
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
 
@@ -18,9 +18,7 @@ class BoardViewset(viewsets.ModelViewSet):
         serializer.save()가 호출될 때 perform_create()가 호출된다고 생각하면 된다.
         perform_create()를 호출했지만, django에서는 개발자의 짐을 덜어주기위해 mixin으로 앞에서 설명한 list(), create()등을 제공하는 데,
         이때 자동으로 save()대신 perform_create()를 호출하는 것이다.
-
         """
-        # breakpoint()
         return serializer.save(user=self.request.user)
 
     def update(self, request, *args, **kwargs):
@@ -33,8 +31,6 @@ class BoardViewset(viewsets.ModelViewSet):
             self.perform_update(serializer)
 
             if getattr(instance, '_prefetched_objects_cache', None):
-                # If 'prefetch_related' has been applied to a queryset, we need to
-                # forcibly invalidate the prefetch cache on the instance.
                 instance._prefetched_objects_cache = {}
 
             return Response(data=serializer.data, status=status.HTTP_200_OK)
