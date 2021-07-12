@@ -47,7 +47,14 @@ class BoardTest(TestCase):
         print("board_response ::", board_response.data)
         creator = board_response.data['user']
 
-        response = self.client.put(f"/comunity/boards/{board_id}/",
+        # response = self.client.put(f"/comunity/boards/{board_id}/",
+        #                            data={
+        #                                "title": "test2",
+        #                                "text": "test2",
+        #                                "user": creator},
+        #                            content_type='application/json')
+
+        response = self.client.patch(f"/comunity/boards/{board_id}/",
                                    data={
                                        "title": "test2",
                                        "text": "test2",
@@ -68,7 +75,14 @@ class BoardTest(TestCase):
             "password": "test2"
         })
 
-        response = self.client.put(f"/comunity/boards/{board_id}/",
+        # response = self.client.put(f"/comunity/boards/{board_id}/",
+        #                              data={
+        #                                  "title": "test2",
+        #                                  "text": "test2",
+        #                                  "user": login_user.data['username']},
+        #                              content_type='application/json')
+
+        response = self.client.patch(f"/comunity/boards/{board_id}/",
                                    data={
                                        "title": "test2",
                                        "text": "test2",
@@ -84,7 +98,15 @@ class BoardTest(TestCase):
         print("board_response ::", board_response.data)
         creator = board_response.data['user']
 
-        response = self.client.put(f"/comunity/boards/{board_id}/",
+        # response = self.client.put(f"/comunity/boards/{board_id}/",
+        #                            data={
+        #                                "title": "test2",
+        #                                "text": "add garbage data",
+        #                                "garbage": "nothing",
+        #                                "user": creator},
+        #                            content_type='application/json')
+
+        response = self.client.patch(f"/comunity/boards/{board_id}/",
                                    data={
                                        "title": "test2",
                                        "text": "add garbage data",
