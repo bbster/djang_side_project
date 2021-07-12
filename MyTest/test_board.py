@@ -6,6 +6,7 @@ from users.models import Users
 class BoardTest(TestCase):
     def setUp(self):
         self.user = Users.objects.create_user(username="test", password="test")
+        self.user2 = Users.objects.create_user(username="test2", password="test2")
 
     def _test_board_create(self):
         login_user = self.client.post("/users/login/", data={

@@ -1,6 +1,7 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from boards.models import Boards
 from boards.serializers import BoardSerializer
@@ -21,3 +22,35 @@ class BoardViewset(viewsets.ModelViewSet):
         """
         # breakpoint()
         return serializer.save(user=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        login_user = request.user
+        instance = self.get_object()
+        if instance.user.username == login_user.username:
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+
+            if getattr(instance, '_prefetched_objects_cache', None):
+                # If 'prefetch_related' has been applied to a queryset, we need to
+                # forcibly invalidate the prefetch cache on the instance.
+                instance._prefetched_objects_cache = {}
+
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"msg": "작성자가 아닙니다."})
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+    def destroy(self, request, *args, **kwargs):
+        login_user = request.user
+        instance = self.get_object()
+
+        if instance.user.username == login_user.username:
+            self.perform_destroy(instance)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({"msg": "작성자가 아닙니다."}, status=status.HTTP_400_BAD_REQUEST)
+
