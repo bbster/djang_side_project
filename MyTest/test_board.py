@@ -40,14 +40,67 @@ class BoardTest(TestCase):
         assert response.status_code == 200
         assert response.json()
 
+    def test_board_update(self):
+        board_response = self._test_board_create()  # 생성
+        board_id = board_response.json()['id']
+
+        print("board_response ::", board_response.data)
+        creator = board_response.data['user']
+
+        response = self.client.put(f"/comunity/boards/{board_id}/",
+                                   data={
+                                       "title": "test2",
+                                       "text": "test2",
+                                       "user": creator},
+                                   content_type='application/json')
+
+        assert response.json()
+        assert response.status_code == 200
+
+    def test_board_update_another_user(self):
+        board_response = self._test_board_create()  # 생성
+        board_id = board_response.json()['id']
+
+        print("board_response ::", board_response.data)
+
+        login_user = self.client.post("/users/login/", data={
+            "username": "test2",
+            "password": "test2"
+        })
+
+        response = self.client.put(f"/comunity/boards/{board_id}/",
+                                   data={
+                                       "title": "test2",
+                                       "text": "test2",
+                                       "user": login_user.data['username']},
+                                   content_type='application/json')
+        assert response.json()
+        assert response.status_code == 400
+
+    def test_board_update_garbage_data(self):
+        board_response = self._test_board_create()  # 생성
+        board_id = board_response.json()['id']
+
+        print("board_response ::", board_response.data)
+        creator = board_response.data['user']
+
+        response = self.client.put(f"/comunity/boards/{board_id}/",
+                                   data={
+                                       "title": "test2",
+                                       "text": "add garbage data",
+                                       "garbage": "nothing",
+                                       "user": creator},
+                                   content_type='application/json')
+
+        print("response.data ::", response.data)
+
+        assert response.json()
+        assert response.status_code == 200
+
     def test_board_delete(self):
         board_response = self._test_board_create()
-        print(Boards.objects.all())
+
         board_id = board_response.json()['id']
 
         response = self.client.delete(f"/comunity/boards/{board_id}/")
-        print(Boards.objects.all())
-        breakpoint()
-        print("삭제", )
-
         assert response

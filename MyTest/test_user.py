@@ -25,7 +25,7 @@ class LoginLogoutTest(TestCase):
         })
 
         assert response.status_code == 200
-        assert response.json()['token']
+        assert response.json()
 
         return response
 
