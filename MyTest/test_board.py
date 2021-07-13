@@ -1,5 +1,5 @@
 from django.test import TestCase
-from boards.models import Boards
+from board.models import Boards
 from users.models import Users
 
 

@@ -2,12 +2,12 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from boards.models import Boards
-from boards.serializers import BoardSerializer
+from board.models import Boards
+from board.serializers import BoardSerializer
 
 
 class BoardViewset(viewsets.ModelViewSet):
-    queryset = Boards.objects.all()
+    queryset = Boards.objects.all().order_by('-created_at')
     serializer_class = BoardSerializer
     permission_classes = [IsAuthenticated]
 

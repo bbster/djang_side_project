@@ -3,7 +3,7 @@ from .models import Boards
 
 
 class BoardsAdmin(admin.ModelAdmin):
-    fields = ['title', 'content', 'user', 'created_at', 'updated_at']
+    fields = ['title', 'content', 'user']
     list_display = ('id', 'title', 'content', 'user', 'created_at', 'updated_at')
 
 

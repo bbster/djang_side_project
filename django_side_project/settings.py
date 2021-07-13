@@ -32,7 +32,8 @@ INSTALLED_APPS = [
 
     # my app
     'users',
-    'boards',
+    'board',
+    'comment',
 ]
 
 MIDDLEWARE = [
