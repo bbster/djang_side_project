@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     # my app
     'users',
     'board',
-    'comment',
+    # 'comment',
 ]
 
 MIDDLEWARE = [
