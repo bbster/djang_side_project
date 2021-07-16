@@ -63,9 +63,13 @@ class LoginView(APIView):
 
 class LogoutView(APIView):
     def post(self, request):
-        # 로그인 되어 있는 token 값을 가져옴, db에 있는 토큰 값과 비교
-        logout(request)
-        return Response({"msg": "로그아웃 되었습니다."}, status=status.HTTP_200_OK)
+        user = self.request.user
+        if user is not None:
+            logout(request)
+            return Response({"msg": "로그아웃 되었습니다."}, status=status.HTTP_200_OK)
+        else:
+            return Response({"msg": "로그인 되어 있지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
         # token = request.data['token']
         # if token is not None:
         #     Token.objects.get(key=token).delete()

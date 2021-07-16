@@ -3,13 +3,7 @@ from account.models import Auth
 
 
 class Board(models.Model):  # 게시판 상위
-
-    BoardTypeChoices = [
-        ('NOTICE', 'Notice'),
-        ('ANOTHER', 'AnotherSomething'),
-    ]
-
-    type = models.CharField(max_length=50, choices=BoardTypeChoices)
+    type = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.type
@@ -18,7 +12,7 @@ class Board(models.Model):  # 게시판 상위
 class Post(models.Model):
     # 제목, 게시글, 유저정보
     board_type = models.ForeignKey(Board, on_delete=models.PROTECT)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, null=False)
     content = models.TextField()
     creator = models.ForeignKey(Auth, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
