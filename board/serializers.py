@@ -1,15 +1,21 @@
 from rest_framework import serializers
-from board.models import Boards, Comment
+from board.models import Board, Post, Comment
 
 
 class BoardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Board
+        fields = ['id', 'type']
+
+
+class PostSerializer(serializers.ModelSerializer):
     creator = serializers.ReadOnlyField(source='creator.username')
     created_at = serializers.ReadOnlyField()
     updated_at = serializers.ReadOnlyField()
 
     class Meta:
-        model = Boards
-        fields = ['id', 'title', 'creator', 'content', 'created_at', 'updated_at']
+        model = Post
+        fields = ['id', 'board_type', 'title', 'creator', 'content', 'created_at', 'updated_at']
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -19,4 +25,4 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'board', 'creator', 'content', 'created_at', 'updated_at']
+        fields = ['id', 'post', 'creator', 'content', 'created_at', 'updated_at']

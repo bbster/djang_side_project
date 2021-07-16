@@ -1,16 +1,22 @@
 from django.contrib import admin
-from .models import Boards, Comment
+from .models import Board, Post, Comment
 
 
 class BoardAdmin(admin.ModelAdmin):
-    fields = ['title', 'content', 'creator']
-    list_display = ('id', 'title', 'content', 'creator', 'created_at', 'updated_at')
+    fields = ['type']
+    list_display = ('id', 'type')
+
+
+class PostAdmin(admin.ModelAdmin):
+    fields = ['board_type', 'title', 'content', 'creator']
+    list_display = ('id', 'board_type', 'title', 'content', 'creator', 'created_at', 'updated_at')
 
 
 class CommentAdmin(admin.ModelAdmin):
-    fields = ['board', 'content', 'creator']
-    list_display = ('id', 'board', 'content', 'creator', 'created_at', 'updated_at')
+    fields = ['post', 'content', 'creator']
+    list_display = ('id', 'post', 'content', 'creator', 'created_at', 'updated_at')
 
 
-admin.site.register(Boards, BoardAdmin)
+admin.site.register(Board, BoardAdmin)
+admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)
