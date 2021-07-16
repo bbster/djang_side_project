@@ -45,7 +45,12 @@ class LoginView(APIView):
 
             if user is not None:
                 login(request, user)
-                return Response(f"{serializer.data['email']}님 환영합니다.", status=status.HTTP_200_OK)
+                login_username = serializer.data['email']
+                data = {
+                    'msg': f"{login_username}님 환영합니다.",
+                    'login_username': login_username
+                }
+                return Response(data, status=status.HTTP_200_OK)
 
                 # token = Token.objects.filter(user=user)
                 # if not token:  # 토큰값이 없다면 다시 생성

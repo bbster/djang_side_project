@@ -10,20 +10,27 @@ class BoardTest(TestCase):
         self.board =Board.objects.create(type='notice')
 
     def _test_board_create(self):
-        login_user = self.client.post("/account/login/", data={
+        response = self.client.post("/account/login/", data={
             "email": "test@test.com",
             "password": "test"
         })
+        response_json = response.json()
+        login_username = response_json['login_username']
+        assert login_username == "test@test.com"
 
         response = self.client.post("/community/posts/", data={
             "board_type": self.board.id,
             "title": "test",
             "content": "test",
-            "creator": self.user
         })
 
         assert response.status_code == 201
         assert response.json()
+        created_post_id = response.json()['id']
+
+        post = Post.objects.get(id=created_post_id)
+        assert post.creator and post.creator.email == 'test@test.com'
+        assert post.creator_id == self.user.id
 
         return response
 
@@ -80,11 +87,11 @@ class BoardTest(TestCase):
 
         login_user = self.client.post("/account/login/", data={
             "email": "test2@test.com",
-            "password": "test2"
+            "password": "test"
         })
 
         assert login_user.json()
-        assert login_user.status_code == 401
+        assert login_user.status_code == 200
 
         # response = self.client.put(f"/community/boards/{board_id}/",
         #                              data={
@@ -93,17 +100,15 @@ class BoardTest(TestCase):
         #                                  "user": login_user.data['email']},
         #                              content_type='application/json')
 
-        # response = self.client.patch(f"/community/posts/{post_id}/",
-        #                            data={
-        #                                "board_type": self.board.id,
-        #                                "title": "test2",
-        #                                "content": "test2",
-        #                                "creator": login_user.data['email']},
-        #                            content_type='application/json')
-        #
-        # assert response.json()
-        # assert response.status_code == 404
+        response = self.client.patch(f"/community/posts/{post_id}/",
+                                   data={
+                                       "board_type": self.board.id,
+                                       "title": "test2",
+                                       "content": "test2"},
+                                   content_type='application/json')
 
+        assert response.json()
+        assert response.status_code == 400
 
 
     def test_board_update_garbage_data(self):
@@ -112,14 +117,6 @@ class BoardTest(TestCase):
 
         print("board_response ::", post_response.data)
         creator = post_response.data['creator']
-
-        # response = self.client.put(f"/community/boards/{board_id}/",
-        #                            data={
-        #                                "title": "test2",
-        #                                "text": "add garbage data",
-        #                                "garbage": "nothing",
-        #                                "user": creator},
-        #                            content_type='application/json')
 
         response = self.client.patch(f"/community/boards/{post_id}/",
                                    data={
