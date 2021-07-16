@@ -6,13 +6,13 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from users.models import Users
-from users.serializers import UserSerializer, SignUpSerializer, LoginSerializer
+from account.models import Auth
+from account.serializers import UserSerializer, SignUpSerializer, LoginSerializer
 
 
 class UserList(APIView):
     def get(self, request):
-        user_list = UserSerializer(Users.objects.all(), many=True)
+        user_list = UserSerializer(Auth.objects.all(), many=True)
 
         return Response(data=user_list.data, status=status.HTTP_200_OK)
 
@@ -25,7 +25,7 @@ class SignupView(APIView):
         if not serializer.is_valid():
             return Response({"msg": "serializer.is_valid error"}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = Users.objects.create_user(username=serializer.data['username'], password=serializer.data['password'])
+        user = Auth.objects.create_user(email=serializer.data['email'], username=serializer.data['username'], password=serializer.data['password'])
 
         # email = EmailMessage('Email test', 'email 발송 테스트', to=[serializer.data['username']])
         # email.send()
@@ -33,7 +33,7 @@ class SignupView(APIView):
         user.save()
 
         # token = Token.objects.create(user=user)
-        return Response({"username": serializer.data['username']}, status=status.HTTP_201_CREATED)
+        return Response(f"{serializer.data['username']}님 회원가입을 축하합니다.", status=status.HTTP_201_CREATED)
 
 
 class LoginView(APIView):
@@ -41,10 +41,12 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
 
         if serializer.is_valid():
-            user = authenticate(username=serializer.data['username'], password=serializer.data['password'])
+            user = authenticate(email=serializer.data['email'], password=serializer.data['password'])
+
             if user is not None:
                 login(request, user)
-                return Response({"username": serializer.data['username']}, status=status.HTTP_200_OK)
+                return Response(f"{serializer.data['email']}님 환영합니다.", status=status.HTTP_200_OK)
+
                 # token = Token.objects.filter(user=user)
                 # if not token:  # 토큰값이 없다면 다시 생성
                 #     token = Token.objects.create(user=user)
@@ -53,7 +55,7 @@ class LoginView(APIView):
                 #     login(request, user)
                 #     return Response({"token": token.key}, status=status.HTTP_200_OK)
             else:
-                return Response({"msg": "로그인 정보가 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"msg": "로그인 정보가 없습니다."}, status=status.HTTP_401_UNAUTHORIZED)
 
         else:
             return Response({"msg": "로그인 정보가 옳지 않습니다"}, status=status.HTTP_401_UNAUTHORIZED)

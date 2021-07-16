@@ -1,11 +1,12 @@
 from django.test import TestCase
-from users.models import Users
+from account.models import Auth
 
 
 class SignupTest(TestCase):
     def test_signup(self):
-        response = self.client.post("/users/signup/", data={
-            "username": "test",
+        response = self.client.post("/account/signup/", data={
+            "email": "test@test.com",
+            "username": "tester",
             "password": "test"})
 
         assert response.status_code == 201
@@ -16,13 +17,11 @@ class SignupTest(TestCase):
 
 class LoginLogoutTest(TestCase):
     def setUp(self):
-        self.user = Users.objects.create_user(username="test", password="test")
+        self.user = Auth.objects.create_user(email="test@test.com", username="test", password="test")
 
     def test_login(self):
-        response = self.client.post("/users/login/", data={
-            "username": "test",
-            "password": "test"
-        })
+
+        response = self.client.post("/account/login/", data={"email": "test@test.com", "password": "test"})
 
         assert response.status_code == 200
         assert response.json()
@@ -30,9 +29,9 @@ class LoginLogoutTest(TestCase):
         return response
 
     def test_logout(self):
-        response = self.test_login()
+        self.test_login()
 
-        logout_response = self.client.post("/users/logout/", data=response.json())
+        logout_response = self.client.post("/account/logout/")
 
         assert logout_response.status_code == 200
         assert logout_response.json()

@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import Users
+from account.models import Auth
 
 
 class Board(models.Model):  # 게시판 상위
@@ -20,19 +20,19 @@ class Post(models.Model):
     board_type = models.ForeignKey(Board, on_delete=models.PROTECT)
     title = models.CharField(max_length=100)
     content = models.TextField()
-    creator = models.ForeignKey(Users, on_delete=models.PROTECT)
+    creator = models.ForeignKey(Auth, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True, editable=False)
 
     def __str__(self):
-        return self.title
+        return self.title + self.creator.username
 
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.PROTECT)
     content = models.TextField(null=True, blank=True)
 
-    creator = models.ForeignKey(Users, on_delete=models.PROTECT, related_name='comments')
+    creator = models.ForeignKey(Auth, on_delete=models.PROTECT, related_name='comments')
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True, editable=False)
 

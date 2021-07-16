@@ -1,23 +1,25 @@
 from django.test import TestCase
-from board.models import Boards
-from users.models import Users
+from board.models import Post, Board
+from account.models import Auth
 
 
 class BoardTest(TestCase):
     def setUp(self):
-        self.user = Users.objects.create_user(username="test", password="test")
-        self.user2 = Users.objects.create_user(username="test2", password="test2")
+        self.user = Auth.objects.create_user(email="test@test.com", username="test", password="test")
+        self.user2 = Auth.objects.create_user(email="test2@test.com", username="test2", password="test")
+        self.board =Board.objects.create(type='notice')
 
     def _test_board_create(self):
-        login_user = self.client.post("/users/login/", data={
-            "username": "test",
+        login_user = self.client.post("/account/login/", data={
+            "email": "test@test.com",
             "password": "test"
         })
 
-        response = self.client.post("/comunity/boards/", data={
+        response = self.client.post("/community/posts/", data={
+            "board_type": self.board.id,
             "title": "test",
-            "text": "test",
-            "user": login_user
+            "content": "test",
+            "creator": self.user
         })
 
         assert response.status_code == 201
@@ -27,12 +29,14 @@ class BoardTest(TestCase):
 
     def test_board_create(self):
         response = self._test_board_create()
+
         print("생성된 data", response.json())
         print("생성 status", response.status_code)
 
     def test_board_list(self):
-        self._test_board_create()
-        response = self.client.get("/comunity/boards/")
+        result = self._test_board_create()
+
+        response = self.client.get("/community/posts/")
 
         print("리스트 data", response.json())
         print("리스트 status", response.status_code)
@@ -41,64 +45,75 @@ class BoardTest(TestCase):
         assert response.json()
 
     def test_board_update(self):
-        board_response = self._test_board_create()  # 생성
-        board_id = board_response.json()['id']
+        post_response = self._test_board_create()  # 생성
+        post_id = post_response.json()['id']
 
-        print("board_response ::", board_response.data)
-        creator = board_response.data['user']
+        print("board_response ::", post_response.data)
+        creator = post_response.data['creator']
 
-        # response = self.client.put(f"/comunity/boards/{board_id}/",
+        # response = self.client.put(f"/community/boards/{board_id}/",
         #                            data={
         #                                "title": "test2",
         #                                "text": "test2",
         #                                "user": creator},
         #                            content_type='application/json')
 
-        response = self.client.patch(f"/comunity/boards/{board_id}/",
+        response = self.client.patch(f"/community/posts/{post_id}/",
                                    data={
+                                       "board_type": self.board.id,
                                        "title": "test2",
-                                       "text": "test2",
-                                       "user": creator},
+                                       "content": "test2",
+                                       "creator": creator},
                                    content_type='application/json')
 
         assert response.json()
         assert response.status_code == 200
 
     def test_board_update_another_user(self):
-        board_response = self._test_board_create()  # 생성
-        board_id = board_response.json()['id']
+        post_response = self._test_board_create()  # 생성
+        post_id = post_response.json()['id']
 
-        print("board_response ::", board_response.data)
+        print("board_response ::", post_response.data)
 
-        login_user = self.client.post("/users/login/", data={
-            "username": "test2",
+        assert post_response.json()
+        assert post_response.status_code == 201
+
+        login_user = self.client.post("/account/login/", data={
+            "email": "test2@test.com",
             "password": "test2"
         })
 
-        # response = self.client.put(f"/comunity/boards/{board_id}/",
+        assert login_user.json()
+        assert login_user.status_code == 401
+
+        # response = self.client.put(f"/community/boards/{board_id}/",
         #                              data={
         #                                  "title": "test2",
         #                                  "text": "test2",
-        #                                  "user": login_user.data['username']},
+        #                                  "user": login_user.data['email']},
         #                              content_type='application/json')
 
-        response = self.client.patch(f"/comunity/boards/{board_id}/",
-                                   data={
-                                       "title": "test2",
-                                       "text": "test2",
-                                       "user": login_user.data['username']},
-                                   content_type='application/json')
-        assert response.json()
-        assert response.status_code == 400
+        # response = self.client.patch(f"/community/posts/{post_id}/",
+        #                            data={
+        #                                "board_type": self.board.id,
+        #                                "title": "test2",
+        #                                "content": "test2",
+        #                                "creator": login_user.data['email']},
+        #                            content_type='application/json')
+        #
+        # assert response.json()
+        # assert response.status_code == 404
+
+
 
     def test_board_update_garbage_data(self):
-        board_response = self._test_board_create()  # 생성
-        board_id = board_response.json()['id']
+        post_response = self._test_board_create()  # 생성
+        post_id = post_response.json()['id']
 
-        print("board_response ::", board_response.data)
-        creator = board_response.data['user']
+        print("board_response ::", post_response.data)
+        creator = post_response.data['creator']
 
-        # response = self.client.put(f"/comunity/boards/{board_id}/",
+        # response = self.client.put(f"/community/boards/{board_id}/",
         #                            data={
         #                                "title": "test2",
         #                                "text": "add garbage data",
@@ -106,12 +121,13 @@ class BoardTest(TestCase):
         #                                "user": creator},
         #                            content_type='application/json')
 
-        response = self.client.patch(f"/comunity/boards/{board_id}/",
+        response = self.client.patch(f"/community/boards/{post_id}/",
                                    data={
+                                       "board_type": self.board.id,
                                        "title": "test2",
-                                       "text": "add garbage data",
+                                       "content": "add garbage data",
                                        "garbage": "nothing",
-                                       "user": creator},
+                                       "creator": creator},
                                    content_type='application/json')
 
         print("response.data ::", response.data)
@@ -120,9 +136,9 @@ class BoardTest(TestCase):
         assert response.status_code == 200
 
     def test_board_delete(self):
-        board_response = self._test_board_create()
+        post_response = self._test_board_create()
 
-        board_id = board_response.json()['id']
+        post_id = post_response.json()['id']
 
-        response = self.client.delete(f"/comunity/boards/{board_id}/")
+        response = self.client.delete(f"/community/posts/{post_id}/")
         assert response

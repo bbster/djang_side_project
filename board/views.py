@@ -25,7 +25,8 @@ class PostViewset(viewsets.ModelViewSet):
         perform_create()를 호출했지만, django에서는 개발자의 짐을 덜어주기위해 mixin으로 앞에서 설명한 list(), create()등을 제공하는 데,
         이때 자동으로 save()대신 perform_create()를 호출하는 것이다.
         """
-        return serializer.save(user=self.request.user)
+
+        return serializer.save(creator=self.request.user)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -94,7 +95,7 @@ class CommentViewset(viewsets.ModelViewSet):
         perform_create()를 호출했지만, django에서는 개발자의 짐을 덜어주기위해 mixin으로 앞에서 설명한 list(), create()등을 제공하는 데,
         이때 자동으로 save()대신 perform_create()를 호출하는 것이다.
         """
-        return serializer.save(user=self.request.user)
+        return serializer.save(creator=self.request.user)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)

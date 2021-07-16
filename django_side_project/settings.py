@@ -14,7 +14,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'users.Users'
+AUTH_USER_MODEL = 'account.Auth'
 
 
 # Application definition
@@ -31,9 +31,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # my app
-    'users',
+    'account',
     'board',
-    # 'comment',
 ]
 
 MIDDLEWARE = [
