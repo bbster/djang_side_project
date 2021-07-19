@@ -63,7 +63,7 @@ class PostViewset(viewsets.ModelViewSet):
 
 
 class CommentViewset(viewsets.ModelViewSet):
-    queryset = Comment.objects.all().order_by('-created_at')
+    queryset = Comment.objects.filter(parent=None).order_by('-created_at')
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
 

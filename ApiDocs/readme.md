@@ -176,13 +176,26 @@
 * **Data Params**
 ```
   data: {
-    "id": 1,
-    "post": 2,
-    "creator": "admin",
-    "content": "asdfasdf",
-    "created_at": "2021-07-16T16:16:54.413943Z",
-    "updated_at": "2021-07-16T16:16:54.414016Z"
-  }
+    {
+        "post": 1,
+        "creator": "admin",
+        "content": "testsetset",
+        "parent": null,
+        "childs": [
+            {
+                "id": 7,
+                "post": 1,
+                "creator": "admin",
+                "content": "test",
+                "parent": 6,
+                "childs": [],
+                "created_at": "2021-07-19T13:35:27.234398Z",
+                "updated_at": "2021-07-19T13:35:27.234509Z"
+            }
+        ],
+        "created_at": "2021-07-19T13:34:33.679162Z",
+        "updated_at": "2021-07-19T13:34:33.679250Z"
+    }
 ```
 
    
@@ -192,12 +205,25 @@
   * **Content:** 
  ```
     {
-        "id": 1,
-        "post": 2,
+        "id": 6,
+        "post": 1,
         "creator": "admin",
-        "content": "asdfasdf",
-        "created_at": "2021-07-16T16:16:54.413943Z",
-        "updated_at": "2021-07-16T16:16:54.414016Z"
+        "content": "testsetset",
+        "parent": null,
+        "childs": [
+            {
+                "id": 7,
+                "post": 1,
+                "creator": "admin",
+                "content": "test",
+                "parent": 6,
+                "childs": [],
+                "created_at": "2021-07-19T13:35:27.234398Z",
+                "updated_at": "2021-07-19T13:35:27.234509Z"
+            }
+        ],
+        "created_at": "2021-07-19T13:34:33.679162Z",
+        "updated_at": "2021-07-19T13:34:33.679250Z"
     }
  ```
 

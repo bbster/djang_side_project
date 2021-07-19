@@ -13,8 +13,8 @@ class PostAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    fields = ['post', 'content', 'creator']
-    list_display = ('id', 'post', 'content', 'creator', 'created_at', 'updated_at')
+    fields = ['post', 'content', 'parent', 'creator']
+    list_display = ('id', 'post', 'content', 'parent', 'creator', 'created_at', 'updated_at')
 
 
 admin.site.register(Board, BoardAdmin)

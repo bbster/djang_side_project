@@ -11,10 +11,10 @@ class Board(models.Model):  # 게시판 상위
 
 class Post(models.Model):
     # 제목, 게시글, 유저정보
-    board_type = models.ForeignKey(Board, on_delete=models.PROTECT)
+    board_type = models.ForeignKey(Board, on_delete=models.PROTECT, related_name='posts')
     title = models.CharField(max_length=100, null=False)
     content = models.TextField()
-    creator = models.ForeignKey(Auth, on_delete=models.PROTECT)
+    creator = models.ForeignKey(Auth, on_delete=models.PROTECT, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True, editable=False)
 
@@ -23,7 +23,8 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.PROTECT)
+    post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.PROTECT, related_name='comments')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='childs')
     content = models.TextField(null=True, blank=True)
 
     creator = models.ForeignKey(Auth, on_delete=models.PROTECT, related_name='comments')
