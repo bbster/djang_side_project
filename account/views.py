@@ -2,7 +2,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.mail import EmailMessage
 
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -32,7 +31,6 @@ class SignupView(APIView):
 
         user.save()
 
-        # token = Token.objects.create(user=user)
         return Response(f"{serializer.data['username']}님 회원가입을 축하합니다.", status=status.HTTP_201_CREATED)
 
 
@@ -51,13 +49,6 @@ class LoginView(APIView):
                 }
                 return Response(data, status=status.HTTP_200_OK)
 
-                # token = Token.objects.filter(user=user)
-                # if not token:  # 토큰값이 없다면 다시 생성
-                #     token = Token.objects.create(user=user)
-                #     return Response({"token": token.key}, status=status.HTTP_200_OK)
-                # else:  # 토큰값이 이미 있다면
-                #     login(request, user)
-                #     return Response({"token": token.key}, status=status.HTTP_200_OK)
             else:
                 return Response({"msg": "로그인 정보가 없습니다."}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -73,10 +64,3 @@ class LogoutView(APIView):
             return Response({"msg": "로그아웃 되었습니다."}, status=status.HTTP_200_OK)
         else:
             return Response({"msg": "로그인 되어 있지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # token = request.data['token']
-        # if token is not None:
-        #     Token.objects.get(key=token).delete()
-        #     return Response({"msg": "로그아웃 되었습니다."}, status=status.HTTP_200_OK)
-        # else:
-        #     return Response({"msg": "로그인이 되어 있지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
