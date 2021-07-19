@@ -126,6 +126,6 @@ class CommentViewset(viewsets.ModelViewSet):
 
         if instance.creator.username == login_user.username:
             self.perform_destroy(instance)
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({"msg": "삭제 되었습니다"}, status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({"msg": "작성자가 아닙니다."}, status=status.HTTP_400_BAD_REQUEST)

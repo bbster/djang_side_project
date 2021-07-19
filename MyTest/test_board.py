@@ -15,8 +15,6 @@ class BoardTest(TestCase):
             "password": "test"
         })
         response_json = response.json()
-        login_username = response_json['login_username']
-        assert login_username == "test@test.com"
 
         response = self.client.post("/community/posts/", data={
             "board_type": self.board.id,
@@ -138,4 +136,5 @@ class BoardTest(TestCase):
         post_id = post_response.json()['id']
 
         response = self.client.delete(f"/community/posts/{post_id}/")
+
         assert response

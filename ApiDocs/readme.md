@@ -91,6 +91,7 @@
 * **URL**
 
   * domain/community/board/
+  * domain/community/board/{pk}
 
 * **Method:**
 
@@ -123,6 +124,7 @@
 * **URL**
 
   * domain/community/posts/
+  * domain/community/posts/{pk}
 
 * **Method:**
 
@@ -168,6 +170,7 @@
 * **URL**
 
   * domain/community/comments/
+  * domain/community/comments/{pk}
 
 * **Method:**
 
