@@ -45,10 +45,9 @@ class LoginView(APIView):
 
             if user is not None:
                 login(request, user)
-                login_username = serializer.data['email']
+                login_username = Auth.objects.get(email=serializer.data['email'])
                 data = {
                     'msg': f"{login_username}님 환영합니다.",
-                    'login_username': login_username
                 }
                 return Response(data, status=status.HTTP_200_OK)
 

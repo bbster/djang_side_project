@@ -1,30 +1,208 @@
--임시- 
-### Api
-회원가입 \
+**Api Docs**
+---
+
+회원가입
+
+* **URL**
+
+  * domain/account/signup/
+
+* **Method:**
+
+   * `POST` 
+   
+* **Data Params**
 ```
-POST domain/account/signup/
-data: {
-    eamil: (CharField), 
-    username: (CharField), 
-    password: (CharField)
-Success: 201
-Fail: 400
+  data: {
+    "eamil": "admin@admin.com",
+    "username": "admin",
+    "password": "password" 
+   }
+```
+* **Success Response:**
+
+  * **Code:** 201 <br />
+  * **Content:** `{ username }님 회원가입을 축하합니다.`
+ 
+* **Error Response:**
+
+  * **Code:** 400 <br />
+  * **Content:** `{"msg": "serializer.is_valid error"}`
+  
+---
+
+로그인 
+
+* **URL**
+
+  * domain/account/login/
+
+* **Method:**
+
+   * `POST` 
+   
+* **Data Params**
+```
+  data: {
+    "email": "admin@admin.com",
+    "password": "password"
+   }
 ```
 
-로그인 \
-`POST domain/account/login/` \
-`data: email(CharField), password(CharField)` \
-`Success: 200` \
-`Fail: 401`
+* **Success Response:**
 
-로그아웃 \
-`POST domain/account/logout/` \
-`Success: 200` \
-`Fail: 400` 
+  * **Code:** 200 <br />
+  * **Content:** `{
+    "msg": "admin님 환영합니다.",
+}`
+ 
+* **Error Response:**
 
-게시판 Type \
-`게시판의 목적 분류`
-`POST domain/community/board/` \
-`data: type(CharField)` \
-`Success: 201 ` \
-`Fail: 400`
+  * **Code:** 401 <br />
+  * **Content:** `{
+    "msg": "로그인 정보가 옳지 않습니다"
+}`
+---
+
+로그아웃 
+
+* **URL**
+
+  * domain/account/logout/
+
+* **Method:**
+
+   * `POST` 
+   
+* **Success Response:**
+
+  * **Code:** 200 <br />
+  * **Content:** `{"msg": "로그아웃 되었습니다."}`
+ 
+* **Error Response:**
+
+  * **Code:** 400 <br />
+  * **Content:** `{"msg": "로그인 되어 있지 않습니다."}`
+
+---
+
+게시판 Type 
+
+* **URL**
+
+  * domain/community/board/
+
+* **Method:**
+
+   * `GET`|`POST`|`PUT`|`DELETE`
+
+* **Data Params**
+```
+  data: {
+    "type": "notice",
+   }
+```
+
+   
+* **Success Response:**
+
+  * **Code:** 201 <br />
+  * **Content:** `{
+        "id": 1,
+        "type": "NOTICE"
+    },`
+ 
+* **Error Response:**
+
+  * **Code:** 400 <br />
+
+---
+
+게시글 
+
+* **URL**
+
+  * domain/community/posts/
+
+* **Method:**
+
+   * `GET`|`POST`|`PUT`|`DELETE` 
+
+* **Data Params**
+```
+  data: {
+    "board_type": 1, 
+    "title": "test_title",
+    "creator": login_user, 
+    "content": "test_content",
+    "created_at": auto_now,
+    "updated_at": auto_now,
+   }
+```
+
+   
+* **Success Response:**
+
+  * **Code:** 200 <br />
+  * **Content:** 
+ ```
+  {
+        "id": 1,
+        "board_type": 1,
+        "title": "test",
+        "creator": "admin",
+        "content": "test",
+        "created_at": "2021-07-16T16:16:24.408786Z",
+        "updated_at": "2021-07-16T16:16:24.408856Z"
+    }
+ ```
+
+* **Error Response:**
+
+  * **Code:** 400 <br />
+
+---
+
+댓글 
+
+* **URL**
+
+  * domain/community/comments/
+
+* **Method:**
+
+   * `GET`|`POST`|`PUT`|`DELETE` 
+
+* **Data Params**
+```
+  data: {
+    "id": 1,
+    "post": 2,
+    "creator": "admin",
+    "content": "asdfasdf",
+    "created_at": "2021-07-16T16:16:54.413943Z",
+    "updated_at": "2021-07-16T16:16:54.414016Z"
+  }
+```
+
+   
+* **Success Response:**
+
+  * **Code:** 200 <br />
+  * **Content:** 
+ ```
+    {
+        "id": 1,
+        "post": 2,
+        "creator": "admin",
+        "content": "asdfasdf",
+        "created_at": "2021-07-16T16:16:54.413943Z",
+        "updated_at": "2021-07-16T16:16:54.414016Z"
+    }
+ ```
+
+* **Error Response:**
+
+  * **Code:** 400 <br />
+
+---
