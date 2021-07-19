@@ -148,15 +148,88 @@
   * **Code:** 200 <br />
   * **Content:** 
  ```
-  {
+retrieve
+{
+    "게시글": {
         "id": 1,
         "board_type": 1,
-        "title": "test",
+        "title": "test1",
         "creator": "admin",
-        "content": "test",
+        "content": "testtest1",
         "created_at": "2021-07-16T16:16:24.408786Z",
-        "updated_at": "2021-07-16T16:16:24.408856Z"
-    }
+        "updated_at": "2021-07-19T15:56:05.379276Z"
+    },
+    "해당 유저 댓글": {
+        "id": 13,
+        "post": 1,
+        "creator": "admin",
+        "content": "test_1_comment",
+        "parent": null,
+        "childs": [
+            {
+                "id": 14,
+                "creator": "admin",
+                "content": "test1_comment_in_comment",
+                "parent": 13,
+                "childs": [],
+                "created_at": "2021-07-19T16:00:57.836930Z",
+                "updated_at": "2021-07-19T16:01:35.662624Z"
+            },
+            {
+                "id": 15,
+                "creator": "test",
+                "content": "test1_comment_in_comment test2",
+                "parent": 13,
+                "childs": [],
+                "created_at": "2021-07-19T16:02:03.059019Z",
+                "updated_at": "2021-07-19T16:02:03.059111Z"
+            }
+        ],
+        "created_at": "2021-07-19T16:00:30.581354Z",
+        "updated_at": "2021-07-19T16:00:30.581426Z"
+    },
+    "해당게시글 전체 댓글": [
+        {
+            "id": 16,
+            "post": 1,
+            "creator": "test",
+            "content": "Test_Comment",
+            "parent": null,
+            "childs": [],
+            "created_at": "2021-07-19T16:02:23.215260Z",
+            "updated_at": "2021-07-19T16:02:23.215319Z"
+        },
+        {
+            "id": 13,
+            "post": 1,
+            "creator": "admin",
+            "content": "test_1_comment",
+            "parent": null,
+            "childs": [
+                {
+                    "id": 14,
+                    "creator": "admin",
+                    "content": "test1_comment_in_comment",
+                    "parent": 13,
+                    "childs": [],
+                    "created_at": "2021-07-19T16:00:57.836930Z",
+                    "updated_at": "2021-07-19T16:01:35.662624Z"
+                },
+                {
+                    "id": 15,
+                    "creator": "test",
+                    "content": "test1_comment_in_comment test2",
+                    "parent": 13,
+                    "childs": [],
+                    "created_at": "2021-07-19T16:02:03.059019Z",
+                    "updated_at": "2021-07-19T16:02:03.059111Z"
+                }
+            ],
+            "created_at": "2021-07-19T16:00:30.581354Z",
+            "updated_at": "2021-07-19T16:00:30.581426Z"
+        }
+    ]
+}
  ```
 
 * **Error Response:**

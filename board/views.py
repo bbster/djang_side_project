@@ -17,6 +17,22 @@ class PostViewset(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
+    def retrieve(self, request, pk, *args, **kwargs):
+        post = Post.objects.get(id=pk)
+        comments_in_post = post.comments.all().order_by('-created_at')
+        my_comment_in_post = post.comments.filter(creator=request.user, parent=None).order_by('-created_at').last()
+
+        post_serializer = PostSerializer(post)
+        comments_in_post_serialzier = CommentSerializer(comments_in_post, many=True)
+        my_comment_in_post_serializer = CommentSerializer(my_comment_in_post)
+
+        result = {
+            "게시글": post_serializer.data,
+            "해당 유저 댓글": my_comment_in_post_serializer.data,
+            "해당게시글 전체 댓글": comments_in_post_serialzier.data
+        }
+        return Response(result, status=status.HTTP_200_OK)
+
     def perform_create(self, serializer):
 
         """
@@ -67,25 +83,25 @@ class CommentViewset(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
 
-    # def list(self, request):
+    # def list(self, request, *args, **kwargs):
     #     user = self.request.user  # 로그인한 유저
     #
-    #     board_detail_all_comment = Comment.objects.filter(board=board).order_by('-created_at')
+    #     board_detail_all_comment = Comment.objects.filter(post=1).order_by('-created_at')
     #
     #     # 로그인한 유저의 댓글중(자신의 댓글중 제일 마지막 댓글을 최상단에 보여지게끔 필터)
-    #     personal_comment = Comment.objects.filter(board=board, creator=user.id).order_by('created_at').last()
-    #     breakpoint()
-    #     board_detail_all_comment_serializer = CommentSerializer(board_detail_all_comment)
-    #     personal_comment_serializer = CommentSerializer(data=personal_comment, many=True)
+    #     personal_comment = Comment.objects.filter(creator=user.id, parent=None).order_by('created_at').last()
     #
-    #     board_detail_all_comment_serializer.is_valid(raise_exception=True)
-    #     personal_comment_serializer.is_valid(raise_exception=True)
+    #     board_detail_all_comment_serializer = CommentSerializer(board_detail_all_comment, many=True)
+    #     personal_comment_serializer = CommentSerializer(personal_comment)
     #
-    #     result = {"사용자 댓글": personal_comment_serializer.data,
-    #               "나머지 댓글": board_detail_all_comment_serializer.data
-    #               }
     #
-    #     return Response(result, status=status.HTTP_200_OK)
+    #     # board_detail_all_comment_serializer.is_valid(raise_exception=True)
+    #     # personal_comment_serializer.is_valid(raise_exception=True)
+    #
+    #
+    #     result = {"사용자 댓글": personal_comment_serializer.data,"나머지 댓글": board_detail_all_comment_serializer.data}
+    #
+    #     return Response(data=result, status=status.HTTP_200_OK)
 
     def perform_create(self, serializer):
 

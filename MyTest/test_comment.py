@@ -31,8 +31,13 @@ class CommentTest(TestCase):
     def test_comment_create(self):
         self._test_comment_create()
 
+        comment_response = self.client.post("/community/comments/", data={
+            "content": "create comment in comment test"
+        })
+
         response = self.client.post("/community/comments/", data={
-            "content": "create Comment_test"
+            "parent": comment_response.json()['id'],
+            "content": "comment in comment"
         })
 
         assert response.json()

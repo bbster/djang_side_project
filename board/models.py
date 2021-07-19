@@ -19,7 +19,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True, editable=False)
 
     def __str__(self):
-        return self.title + self.creator.username
+        return self.title
 
 
 class Comment(models.Model):
@@ -32,4 +32,4 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True, editable=False)
 
     def __str__(self):
-        return self.content + self.creator.username
+        return self.content
