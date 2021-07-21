@@ -1,0 +1,18 @@
+{
+	"env": {
+		"development": {
+			"plugins": [],
+			"presets": [
+				"next/babel"
+			]
+		},
+		"production": {
+			"plugins": [],
+			"presets": [
+				"next/babel"
+			]
+		}
+	},
+	"plugins": [],
+	"presets": []
+}
