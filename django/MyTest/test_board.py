@@ -83,20 +83,12 @@ class BoardTest(TestCase):
         assert post_response.json()
         assert post_response.status_code == 201
 
-        login_user = self.client.post("/account/login/", data={
+        self.client.post("/account/logout/")
+
+        self.client.post("/account/login/", data={
             "email": "test2@test.com",
             "password": "test"
         })
-
-        assert login_user.json()
-        assert login_user.status_code == 200
-
-        # response = self.client.put(f"/community/boards/{board_id}/",
-        #                              data={
-        #                                  "title": "test2",
-        #                                  "text": "test2",
-        #                                  "user": login_user.data['email']},
-        #                              content_type='application/json')
 
         response = self.client.patch(f"/community/posts/{post_id}/",
                                    data={
@@ -105,24 +97,28 @@ class BoardTest(TestCase):
                                        "content": "test2"},
                                    content_type='application/json')
 
-        assert response.json()
-        assert response.status_code == 400
+        # response = self.client.put(f"/community/boards/{board_id}/",
+        #                              data={
+        #                                  "title": "test2",
+        #                                  "text": "test2",
+        #                                  "user": login_user.data['email']},
+        #                              content_type='application/json')
 
+        assert response.json() == {'msg': '작성자가 아닙니다.'}
+        assert response.status_code == 400
 
     def test_board_update_garbage_data(self):
         post_response = self._test_board_create()  # 생성
         post_id = post_response.json()['id']
 
         print("board_response ::", post_response.data)
-        creator = post_response.data['creator']
 
         response = self.client.patch(f"/community/boards/{post_id}/",
                                    data={
                                        "board_type": self.board.id,
                                        "title": "test2",
                                        "content": "add garbage data",
-                                       "garbage": "nothing",
-                                       "creator": creator},
+                                       "garbage": "nothing"},
                                    content_type='application/json')
 
         print("response.data ::", response.data)
@@ -137,4 +133,21 @@ class BoardTest(TestCase):
 
         response = self.client.delete(f"/community/posts/{post_id}/")
 
-        assert response
+        assert response.status_code == 204
+
+    def test_board_another_user_delete(self):
+        post_response = self._test_board_create()
+
+        post_id = post_response.json()['id']
+
+        self.client.post("/account/logout/")
+
+        self.client.post("/account/login/", data={
+            "email": "test2@test.com",
+            "password": "test"
+        })
+
+        response = self.client.delete(f"/community/posts/{post_id}/")
+
+        assert response.json() == {"msg": "작성자가 아닙니다."}
+        assert response.status_code == 400
