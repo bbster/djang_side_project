@@ -13,6 +13,22 @@ module.exports = {
 			},
 		],
 	},
+	async headers() {
+		return [
+			{
+				source: "/",
+				headers: [],
+			},
+			{
+				source: "/en-US",
+				headers: [],
+			},
+			{
+				source: "/(.*)",
+				headers: [],
+			},
+		];
+	},
 	future: {
 		webpack5: false,
 	},

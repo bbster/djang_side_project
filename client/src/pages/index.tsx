@@ -1,20 +1,23 @@
 import React from "react";
-import Head from "next/head";
+import { GetServerSidePropsContext } from "next";
+// import Head from "next/head";
 
-import DefaultLayout from "layouts/default";
-import { Button } from "components";
+import DefaultLayout from "layouts/Default";
+import { Button } from "components/atoms";
+import { TextInput } from "components/atoms";
 
-const TITLE = "팬딩 - 크리에이터와 팬이 가장 가까운 곳";
-const Index = () => {
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+	return { props: {} };
+}
+
+function Index(ctx: GetServerSidePropsContext) {
 	return (
-		<>
-			<Head>
-				<title>{TITLE}</title>
-				<meta name="description" content="" />
-				<meta name="keywords" content="" />
-			</Head>
-			<DefaultLayout></DefaultLayout>
-		</>
+		<DefaultLayout>
+			<Button.Default label="sfesssf" />
+			<Button.SubmitButton label="sfesf" intent="positive" />
+			<TextInput.Default />
+		</DefaultLayout>
 	);
-};
+}
+
 export default Index;

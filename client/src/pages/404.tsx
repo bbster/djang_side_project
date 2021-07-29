@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 
-const TITLE = "팬딩 - 404";
+const TITLE = "404";
 const Custom404 = () => {
 	return (
 		<div className="container">
