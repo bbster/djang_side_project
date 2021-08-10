@@ -1,0 +1,19 @@
+{
+    "name": "@side-client/core",
+    "version": "0.1.0",
+    "description": "",
+    "main": "build/index.js",
+    "repository": "",
+    "author": "Yongkuk Kim <@gmail.com>",
+    "scripts": {
+        "build": "tsc --build",
+        "start": "tsc --watch",
+        "test": "jest"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@types/jest": "26.0.19",
+        "jest": "26.6.0",
+        "ts-jest": "26.4.4"
+    }
+}

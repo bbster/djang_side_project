@@ -1,45 +1,47 @@
 module.exports = {
-	env: {
-		browser: true,
-		es2020: true,
-		node: true,
-	},
-	extends: [
-		"eslint:recommended",
-		"plugin:react/recommended",
-		"plugin:prettier/recommended",
-		"plugin:@typescript-eslint/eslint-recommended",
-		"plugin:@typescript-eslint/recommended",
-	],
-	parser: "@typescript-eslint/parser",
-	parserOptions: {
-		ecmaFeatures: {
-			jsx: true,
-		},
-		ecmaVersion: 11,
-		sourceType: "module",
-	},
-	plugins: ["react", "@typescript-eslint", "prettier"],
-	rules: {
-		quotes: ["error", "double"],
-		semi: ["error", "always"],
-		"@typescript-eslint/explicit-module-boundary-types": 0,
-		"@typescript-eslint/no-var-requires": 0,
-		"@typescript-eslint/ban-types": 0,
-		"react/prop-types": 0,
-		"react/react-in-jsx-scope": 1,
-		"prettier/prettier": "error",
-		"linebreak-style": ["error", "windows"],
-	},
-	ignorePatterns: [
-		"dist/*.js",
-		"src/stories/**/*.svg",
-		"src/stories/**/*.css",
-		"src/stories/**/*.mdx",
-	],
-	settings: {
-		react: {
-			version: "detect",
-		},
-	},
+    env: {
+        browser: true,
+        es2020: true,
+        node: true,
+    },
+    extends: [
+        'eslint:recommended',
+        'plugin:prettier/recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+        'prettier/@typescript-eslint',
+    ],
+    parser: '@typescript-eslint/parser',
+    parserOptions: {
+        ecmaFeatures: {
+            jsx: true,
+        },
+        ecmaVersion: 2020,
+        sourceType: 'module',
+    },
+    rules: {
+        'prettier/prettier': ['error', { singleQuote: true, endOfLine: 'auto' }],
+        'linebreak-style': 0,
+        'no-console': 'error',
+        '@typescript-eslint/explicit-function-return-type': ['off'],
+        '@typescript-eslint/explicit-module-boundary-types': ['off'],
+        '@typescript-eslint/no-unused-vars': ['error'],
+        'no-unused-expressions': 'off',
+        'no-useless-concat': 'off',
+        'no-useless-constructor': 'off',
+        'default-case': 'off',
+        '@typescript-eslint/no-use-before-define': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-empty-interface': 'off',
+        '@typescript-eslint/ban-ts-ignore': 'off',
+        '@typescript-eslint/no-empty-function': 'off',
+        '@typescript-eslint/no-var-requires': ['off'],
+        'react/react-in-jsx-scope': 1,
+        '@typescript-eslint/ban-types': ['off'],
+    },
+    settings: {
+        react: {
+            version: 'detect',
+        },
+    },
 };
